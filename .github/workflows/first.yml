@@ -16,33 +16,42 @@
 #     - name: This action is to cat file
 #       run: cat test
 
-name: Node.js CI
+name: Chuck Norris Joke Comment
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types:
+      - opened
 
 jobs:
-  build:
-
+  joke-comment:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [12, 14, 16]
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Setup Node.js
+    - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 14
 
     - name: Install dependencies
-      run: npm install
+      run: npm install icndb-api
 
-    - name: Run tests
-      run: npm test
+    - name: Fetch Chuck Norris joke
+      id: fetch-joke
+      run: echo "::set-output name=joke::$(npx icndb)"
+
+    - name: Comment on pull request
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { joke } = context.payload.workflow_run.outputs;
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `🤣 Chuck Norris Joke: ${joke}`,
+          });
