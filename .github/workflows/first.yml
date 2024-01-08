@@ -1,19 +1,48 @@
-name: First Job
-run-name: ${{ github.actor }} is running a first job
+# name: First Job
+# run-name: ${{ github.actor }} is running a first job
+# on:
+#     push: 
+#         branches: main
+# jobs:
+#   first_job:
+#     runs-on: ubuntu-22.04
+#     steps:
+#     - name: first action
+#       run: echo "First action"
+
+#     - name: Second action is to list files
+#       run: ls -lrthR
+    
+#     - name: This action is to cat file
+#       run: cat test
+
+name: Node.js CI
+
 on:
-    push: 
-        branches: main
+  push:
+    branches:
+      - main
+
 jobs:
-  first_job:
-    runs-on: ubuntu-22.04
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12, 14, 16]
+
     steps:
-    - name: first action
-      run: echo "First action"
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-    - name: Second action is to list files
-      run: ls -lrthR
-    
-    - name: This action is to cat file
-      run: cat test
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
 
-    
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests
+      run: npm test
