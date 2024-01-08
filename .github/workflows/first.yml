@@ -9,7 +9,7 @@ jobs:
       run: echo "First action"
 
     - name: Second action is to list files
-      run: ls
+      run: ls -lrthR
     
     - name: This action is to cat file
       run: cat test
