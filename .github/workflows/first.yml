@@ -1,57 +1,18 @@
-# name: First Job
-# run-name: ${{ github.actor }} is running a first job
-# on:
-#     push: 
-#         branches: main
-# jobs:
-#   first_job:
-#     runs-on: ubuntu-22.04
-#     steps:
-#     - name: first action
-#       run: echo "First action"
-
-#     - name: Second action is to list files
-#       run: ls -lrthR
-    
-#     - name: This action is to cat file
-#       run: cat test
-
-name: Chuck Norris Joke Comment
-
+name: First Job
+run-name: ${{ github.actor }} is running a first job
 on:
-  pull_request:
-    types:
-      - opened
-
+    push: 
+        branches: main
 jobs:
-  joke-comment:
-    runs-on: ubuntu-latest
-
+  first_job:
+    runs-on: ubuntu-22.04
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    - name: first action
+      run: echo "First action"
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14
+    - name: Second action is to list files
+      run: ls -lrthR
+    
+    - name: This action is to cat file
+      run: cat test
 
-    - name: Install dependencies
-      run: npm install icndb-api
-
-    - name: Fetch Chuck Norris joke
-      id: fetch-joke
-      run: echo "::set-output name=joke::$(npx icndb)"
-
-    - name: Comment on pull request
-      uses: actions/github-script@v7
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const { joke } = context.payload.workflow_run.outputs;
-          github.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: `🤣 Chuck Norris Joke: ${joke}`,
-          });
