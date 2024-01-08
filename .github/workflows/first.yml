@@ -1,0 +1,17 @@
+name: First Job
+run-name: ${{ github.actor }} is running a first job
+on: push
+jobs:
+  first_job:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: first action
+      run: echo "First action"
+
+    - name: Second action is to list files
+      run: ls
+    
+    - name: This action is to cat file
+      run: cat test
+
+    
